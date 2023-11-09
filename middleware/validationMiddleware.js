@@ -55,7 +55,14 @@ export const validateRegisterInput = withValidationErrors([
         const user = await User.findOne({ email })
         if (user) throw new BadRequestError('email already exists')
     }),
-    body('password').notEmpty().withMessage('password is required').isLength({ min: 8 }).withMessage('password must be atleast 8 characters long'),
+    body('password1').notEmpty().withMessage('password is required').isLength({ min: 8 }).withMessage('password must be atleast 8 characters long'),
+    body('password2').notEmpty().withMessage('password not re-entered').custom((value, { req }) => {
+        if (value !== req.body.password1) {
+            throw new BadRequestError('Re-entered password is not the same');
+        }
+        return true;
+    }),
+
     body('location').notEmpty().withMessage('location is required'),
     body("lastName").notEmpty().withMessage("last name is required")
 ])
