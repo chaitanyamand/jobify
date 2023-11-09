@@ -1,7 +1,7 @@
 import { body, param, validationResult } from 'express-validator'
 import { BadRequestError, NotFoundError, UnauthenticatedError, UnauthorizedError, InternalServerError } from '../errors/customError.js'
 import { JOB_STATUS, JOB_TYPE } from '../utils/constants.js';
-import fetch from 'node-fetch'
+import axios from 'axios'
 import mongoose from 'mongoose';
 import Job from '../models/JobModel.js'
 import User from '../models/UserModel.js'
@@ -58,8 +58,8 @@ export const validateRegisterInput = withValidationErrors([
 
 
         //email validation
-        const response = await fetch("https://emailvalidation.abstractapi.com/v1/?api_key=" + process.env.EMAIL_VALIDATION_API_KEY + "&email=" + email)
-        const jsonResp = await response.json();
+        const response = await axios.get("https://emailvalidation.abstractapi.com/v1/?api_key=" + process.env.EMAIL_VALIDATION_API_KEY + "&email=" + email)
+        const jsonResp = await response.data
         if (jsonResp.quality_score < 0.70) throw new BadRequestError('invalid email')
         if (jsonResp.is_valid_format.value === false) throw new BadRequestError('email format is invalid. enter valid email')
         if (jsonResp.is_disposable_email.value === true) throw new BadRequestError('email is disposable. enter valid email')
