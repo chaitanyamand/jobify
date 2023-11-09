@@ -15,7 +15,7 @@ const LogoutContainer = () => {
         onClick={() => setShowLogout(!showLogout)}
       >
         {user.avatar ? (
-          <img src={user.avatar} alt="avatar" className="img" />
+          <img src={user.avatar} alt="avatar" className="img" loading="lazy" />
         ) : (
           <FaUserCircle />
         )}
