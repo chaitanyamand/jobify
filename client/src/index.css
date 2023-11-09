@@ -231,6 +231,7 @@ button:disabled {
 /* form */
 
 .form {
+  display: block;
   width: 90vw;
   max-width: var(--fixed-width);
   background: var(--background-secondary-color);
