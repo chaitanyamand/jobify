@@ -28,3 +28,10 @@ export class UnauthorizedError extends Error {
         this.statusCode = StatusCodes.UNAUTHORIZED;
     }
 }
+export class InternalServerError extends Error {
+    constructor(message) {
+        super(message);
+        this.name = "InternalServererror";
+        this.statusCode = StatusCodes.INTERNAL_SERVER_ERROR;
+    }
+}

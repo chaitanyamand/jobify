@@ -1,5 +1,5 @@
 import { body, param, validationResult } from 'express-validator'
-import { BadRequestError, NotFoundError, UnauthenticatedError, UnauthorizedError } from '../errors/customError.js'
+import { BadRequestError, NotFoundError, UnauthenticatedError, UnauthorizedError, InternalServerError } from '../errors/customError.js'
 import { JOB_STATUS, JOB_TYPE } from '../utils/constants.js';
 import mongoose from 'mongoose';
 import Job from '../models/JobModel.js'
@@ -54,11 +54,22 @@ export const validateRegisterInput = withValidationErrors([
     body('email').notEmpty().withMessage('email is required').isEmail().withMessage('invalid email format').custom(async (email) => {
         const user = await User.findOne({ email })
         if (user) throw new BadRequestError('email already exists')
+
+
+        //email validation
+        const response = await fetch("https://emailvalidation.abstractapi.com/v1/?api_key=" + process.env.EMAIL_VALIDATION_API_KEY + "&email=" + email)
+        const jsonResp = await response.json();
+        if (jsonResp.quality_score < 0.70) throw new BadRequestError('invalid email')
+        if (jsonResp.is_valid_format.value === false) throw new BadRequestError('email format is invalid. enter valid email')
+        if (jsonResp.is_disposable_email.value === true) throw new BadRequestError('email is disposable. enter valid email')
+        if (jsonResp.is_mx_found.value === false) throw new BadRequestError('mx validation failed. enter valid email')
+        if (jsonResp.is_smtp_valid.value === false) throw new BadRequestError('smtp validation failed. enter valid email')
+
     }),
     body('password1').notEmpty().withMessage('password is required').isLength({ min: 8 }).withMessage('password must be atleast 8 characters long'),
     body('password2').notEmpty().withMessage('password not re-entered').custom((value, { req }) => {
         if (value !== req.body.password1) {
-            throw new BadRequestError('Re-entered password is not the same');
+            throw new BadRequestError('re-entered password is not the same');
         }
         return true;
     }),
