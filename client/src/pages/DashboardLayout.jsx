@@ -11,18 +11,27 @@ import { createContext, useState } from "react";
 import { checkDefaultTheme } from "../App";
 import customFetch from "../utils/customFetch";
 import { toast } from "react-toastify";
+import { useQuery } from "@tanstack/react-query";
 
-export const DashBoardContext = createContext();
-export const loader = async () => {
-  try {
+const userQuery = {
+  queryKey: ["user"],
+  queryFn: async () => {
     const { data } = await customFetch.get("/users/current-user");
     return data;
+  },
+};
+
+export const loader = (queryClient) => async () => {
+  try {
+    await queryClient.ensureQueryData(userQuery);
+    return null;
   } catch (error) {
     return redirect("/");
   }
 };
-const DashboardLayout = () => {
-  const { user } = useLoaderData();
+export const DashBoardContext = createContext();
+const DashboardLayout = ({ queryClient }) => {
+  const { user } = useQuery(userQuery).data;
   const navigate = useNavigate();
   const navigation = useNavigation();
   const isPageLoading = navigation.state === "loading";
@@ -43,6 +52,7 @@ const DashboardLayout = () => {
   const logoutUser = async () => {
     navigate("/");
     await customFetch.get("/auth/logout");
+    queryClient.invalidateQueries();
     toast("Logging out");
   };
 
