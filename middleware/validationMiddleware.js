@@ -96,6 +96,15 @@ export const validateUpdateUserInput = withValidationErrors([
             if (user && user._id.toString() !== req.user.userId) {
                 throw new Error("email already exists");
             }
+
+            //email validation
+            const response = await axios.get("https://emailvalidation.abstractapi.com/v1/?api_key=" + process.env.EMAIL_VALIDATION_API_KEY + "&email=" + email)
+            const jsonResp = await response.data
+            if (jsonResp.quality_score < 0.70) throw new BadRequestError('invalid email')
+            if (jsonResp.is_valid_format.value === false) throw new BadRequestError('email format is invalid. enter valid email')
+            if (jsonResp.is_disposable_email.value === true) throw new BadRequestError('email is disposable. enter valid email')
+            if (jsonResp.is_mx_found.value === false) throw new BadRequestError('mx validation failed. enter valid email')
+            if (jsonResp.is_smtp_valid.value === false) throw new BadRequestError('smtp validation failed. enter valid email')
         }),
     body("lastName").notEmpty().withMessage("last name is required"),
     body("location").notEmpty().withMessage("location is required"),
