@@ -47,13 +47,21 @@ Run the setup script:
 Create a `.env` file in the root directory. Use the following template and fill in your own values:
 
 `NODE_ENV=development`
+
 `PORT=5100`
+
 `MONGO_URL=****`
+
 `JWT_SECRET=****`
+
 `JWT_EXPIRES_IN=1d`
+
 `CLOUD_NAME=****`
+
 `CLOUD_API_KEY=****`
+
 `CLOUD_API_SECRET=****`
+
 `EMAIL_VALIDATION_API_KEY=****`
 
 ### 4. Start the development server
