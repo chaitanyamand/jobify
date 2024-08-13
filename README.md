@@ -24,7 +24,7 @@ Check out the live demo of the application [here](https://jobify-chaitanyamands-
 
 - Node.js
 - MongoDB
-- npm or yarn
+- npm
 
 ## Installation
 
