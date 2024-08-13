@@ -32,7 +32,7 @@ Check out the live demo of the application [here](https://jobify-chaitanyamands-
 
 Clone the repository and navigate to the project directory:
 
-`git clone https://github.com/yourusername/jobify.git`
+`git clone https://github.com/chaitanyamand/jobify.git`
 
 `cd jobify`
 
