@@ -16,7 +16,7 @@
 
 ## Live Demo
 
-Check out the live demo of the application [here]("https://jobify-chaitanyamands-projects.vercel.app/").
+Check out the live demo of the application [here](https://jobify-chaitanyamands-projects.vercel.app/).
 
 ## Getting Started
 
@@ -33,6 +33,7 @@ Check out the live demo of the application [here]("https://jobify-chaitanyamands
 Clone the repository and navigate to the project directory:
 
 `git clone https://github.com/yourusername/jobify.git`
+
 `cd jobify`
 
 ### 2. Set up the project
